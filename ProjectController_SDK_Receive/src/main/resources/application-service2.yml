@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    type: org.postgresql.ds.PGPoolingDataSource
+    driver-class-name: org.postgresql.Driver
+    username: gaussdb
+    password: Enmo@123
+    url: jdbc:postgresql://47.113.224.195:5432/qg23?charSet=UTF-8
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.21.56.118:8848
+      config:
+        server-addr: 10.21.56.118:8848
+  application:
+    name: sdk-service-receive
+server:
+  port: 8085
+mybatis:
+  #扫描mapper的文件路径
+  mapper-locations: classpath:mapper/*.xml
+  #注册实体类
+  type-aliases-package: com.qg24.po.entity
+  #设置配置的日志输出信息
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+rocketmq:
+  name-server: 10.21.56.118:9876

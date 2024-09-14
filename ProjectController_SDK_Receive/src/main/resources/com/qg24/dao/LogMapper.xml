@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qg24.dao.LogMapper">
+    <insert id="insertUserOperateLog">
+        insert into user_operate_log
+        (user_id, operate_type) VALUES (#{userId},#{operateType})
+    </insert>
+    <insert id="insertProjectPresentationData" parameterType="arraylist">
+        insert into project_presentation_data (project_id,
+                                               total_visits,
+                                               error_number,
+                                               front_error_number,
+                                               backend_error_number,
+                                               mobile_error_number,
+                                               error_rate,
+                                               warning_rate)
+
+        select project_id,
+               total_visits,
+               error_number,
+               front_error_number,
+               backend_error_number,
+               mobile_error_number,
+
+               error_rate,
+               warning_rate
+        from project_presentation_data
+        where project_id in
+        <foreach collection="projectIds" item="projectId" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+            and DATE(date) = DATE(NOW() - INTERVAL 1 DAY)
+    </insert>
+
+    <select id="getTotalBackendExceptionLogs" resultType="int">
+        select count(*) from backend_exception_info where project_id=#{projectId}
+    </select>
+
+
+    <select id="getFrontExceptionLogsNum" resultType="int">
+        select count(*) from front_exception_log where project_id = #{projectId}
+    </select>
+
+
+    <select id="getTotalBackendRequestNum" resultType="int">
+        select count(*) from backend_request_info where project_id = #{projectId}
+    </select>
+
+
+    <select id="getTotalFrontPerformanceNum" resultType="int">
+        select count(*) from front_performance_log where project_id = #{projectId}
+    </select>
+
+
+    <select id="getMobilePerformanceNum" resultType="int">
+        select count(*) from mobile_performance_log where project_id = #{projectId}
+    </select>
+
+
+    <select id="getMobileExceptionNum" resultType="int">
+        select count(*) from mobile_exception_log where project_id = #{projectId}
+    </select>
+
+
+    <select id="getTotalBackendLogInfo" resultType="int">
+        select count(*) from backend_log_info where project_id = #{projectId}
+    </select>
+
+</mapper>

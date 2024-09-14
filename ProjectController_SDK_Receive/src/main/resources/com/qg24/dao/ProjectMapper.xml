@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qg24.dao.ProjectMapper">
+    
+    <update id="updateErrorRateAndNum">
+        update project_presentation_data set error_number = #{errorNum}, error_rate = #{errorRate} where project_id = #{projectId} and date = (
+            select MAX(date) from project_presentation_data where project_id = #{projectId}
+        )
+    </update>
+    
+    <select id="getProjectData" resultType="com.qg24.po.entity.ProjectPresentationData">
+        select * from project_presentation_data where project_id = #{projectId} and date = (
+            select MAX(date) from project_presentation_data where project_id = #{projectId}
+            )
+    </select>
+    
+    <update id="updateBackendErr" >
+        update project_presentation_data set backend_error_number = #{errorNum} where project_id = #{projectId} and date = (
+            select MAX(date) from project_presentation_data where project_id = #{projectId}
+        )
+    </update>
+    
+    <update id="updateFrontErr">
+        update project_presentation_data set front_error_number = #{errorNum} where project_id = #{projectId} and date = (
+            select MAX(date) from project_presentation_data where project_id = #{projectId}
+        )
+    </update>
+    
+    <update id="updateMobileErr">
+        update project_presentation_data set mobile_error_number = #{errorNum} where project_id = #{projectId} and date = (
+            select MAX(date) from project_presentation_data where project_id = #{projectId}
+        )
+    </update>
+
+</mapper>
